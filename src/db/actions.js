@@ -16,7 +16,7 @@ export function findCharacters(criteria) {
 }
 export function findCharacter(id) {
   return runDBAction(collection => {
-    return collection.find({ _id: new ObjectId(id) });
+    return collection.find({ _id: new ObjectId(id) }).toArray();
   })
 }
 export function updateCharacter(id, values) {
