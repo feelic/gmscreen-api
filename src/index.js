@@ -11,6 +11,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// READ ALL CHARACTERS
 app.get("/characters", (req, res) => {
   const filters = (req.body && req.body.filters) || {};
 
@@ -22,16 +23,20 @@ app.get("/characters", (req, res) => {
     });
   });
 });
+
+// CREATE NEW CHARACTER
 app.post("/character", (req, res) => {
   const character = req.body;
 
   actions
     .insertCharacters([character])
-    .then(data => {
-      res.json({ data });
+    .then((data) => {
+      res.json({data: data.ops[0]});
     })
     .catch(handleError.bind(res));
 });
+
+// READ SINGLE CHARACTER
 app.get("/character/:charId", (req, res) => {
   const charId = req.params.charId;
 
@@ -47,6 +52,8 @@ app.get("/character/:charId", (req, res) => {
     })
     .catch(handleError.bind(res));
 });
+
+// UPDATE CHARACTER
 app.post("/character/:charId", (req, res) => {
   const charId = req.params.charId;
   const character = req.body;
@@ -61,6 +68,8 @@ app.post("/character/:charId", (req, res) => {
     })
     .catch(handleError.bind(res));
 });
+
+// DELETE CHARACTER
 app.delete("/character/:charId", (req, res) => {
   const charId = req.params.charId;
 
