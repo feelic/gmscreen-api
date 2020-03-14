@@ -1,4 +1,9 @@
-export default function uploadImage (req, res) {
+import uuid from "uuid";
+import path from "path";
+
+const uuidv4 = uuid.v4;
+
+export default function uploadImage(req, res) {
   try {
     if (!req.files) {
       res.send({

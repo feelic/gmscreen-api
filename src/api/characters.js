@@ -1,4 +1,6 @@
-export function readAllCharacters (req, res) {
+import * as actions from "../db/actions.js";
+
+export function readAllCharacters(req, res) {
   const filters = (req.body && req.body.filters) || {};
 
   actions.findCharacters(filters).then(data => {
@@ -9,7 +11,7 @@ export function readAllCharacters (req, res) {
     });
   });
 }
-export function createCharacter (req, res) {
+export function createCharacter(req, res) {
   const character = req.body;
 
   actions
@@ -17,24 +19,24 @@ export function createCharacter (req, res) {
     .then(data => {
       res.json({ data: data.ops[0] });
     })
-    .catch(handleError.bind(res));
+    .catch(err => res.status(500).send(err));
 }
-export function readSingleCharacter (req, res) {
+export function readSingleCharacter(req, res) {
   const charId = req.params.charId;
 
   actions
     .findCharacter(charId)
     .then(data => {
       if (!data[0]) {
-        return res.json({
+        return res.status(404).json({
           error: `Could not find character with id ${charId}`
         });
       }
       res.json({ data: data[0] });
     })
-    .catch(handleError.bind(res));
+    .catch(err => res.status(500).send(err));
 }
-export function updateCharacter (req, res) {
+export function updateCharacter(req, res) {
   const charId = req.params.charId;
   const character = req.body;
 
@@ -46,10 +48,10 @@ export function updateCharacter (req, res) {
     .then(data => {
       res.json({ data: data[0] });
     })
-    .catch(handleError.bind(res));
+    .catch(err => res.status(500).send(err));
 }
 
-export function deleteCharacter (req, res) {
+export function deleteCharacter(req, res) {
   const charId = req.params.charId;
 
   actions
@@ -57,5 +59,5 @@ export function deleteCharacter (req, res) {
     .then(data => {
       res.json({ data });
     })
-    .catch(handleError.bind(res));
+    .catch(err => res.status(500).send(err));
 }

@@ -8,18 +8,18 @@ export default function connect() {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }).catch(err => {
-    console.log('encountered a connection error')
+    console.log("encountered a connection error:", err);
   });
 }
 
-export function runDBAction (action) {
+export function runDBAction(action) {
   return connect()
     .then(client => {
       const db = client.db(DB_NAME);
 
       return action(db);
     })
-    .then((res) => {
+    .then(res => {
       return res;
     })
     .catch(err => {

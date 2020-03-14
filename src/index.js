@@ -1,25 +1,51 @@
 import express from "express";
 import cors from "cors";
-import uuid from "uuid";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
-import * as actions from "./db/actions.js";
-import path from "path";
-import * as characters from "./api/characters";
-import uploadImage from "./api/image-upload";
+import session from "express-session";
+import passport from "passport";
+import localStrategy from "passport-local";
+
+import * as characters from "./api/characters.js";
+import uploadImage from "./api/image-upload.js";
 
 const app = express();
 const port = 3000;
-const uuidv4 = uuid.v4;
+const Strategy = localStrategy.Strategy;
+
+passport.use(
+  new Strategy(function(username, password /*, done*/) {
+    console.log(username, password);
+    // User.findOne({ username: username }, function (err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) { return done(null, false); }
+    //   if (!user.verifyPassword(password)) { return done(null, false); }
+    //   return done(null, user);
+    // });
+  })
+);
 
 app.use(cors());
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(
   fileUpload({
     createParentPath: true
   })
+);
+
+app.post(
+  "/login",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  function(req, res) {
+    res.redirect("/");
+  }
 );
 
 app.get("/characters", characters.readAllCharacters);
@@ -32,7 +58,3 @@ app.post("/image-upload", uploadImage);
 app.listen(port, () =>
   console.log(`Hello world app listening on port ${port}!`)
 );
-
-function handleError(err) {
-  this.status(500).json({ error: "API encountered an error", details: err });
-}

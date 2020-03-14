@@ -1,5 +1,4 @@
 import { runDBAction } from "./connect.js";
-import { DB_NAME } from "../constants/index.js";
 import mongodb from "mongodb";
 
 const ObjectId = mongodb.ObjectId;
@@ -23,7 +22,7 @@ export function findCharacter(id) {
     const collection = db.collection("characters");
 
     return collection.find({ _id: new ObjectId(id) }).toArray();
-  })
+  });
 }
 export function updateCharacter(id, values) {
   return runDBAction(db => {
