@@ -8,22 +8,38 @@ import localStrategy from "passport-local";
 
 import * as characters from "./api/characters.js";
 import uploadImage from "./api/image-upload.js";
+import * as users from "./api/users.js";
 
 const app = express();
 const port = 3000;
 const Strategy = localStrategy.Strategy;
 
 passport.use(
-  new Strategy(function(username, password /*, done*/) {
-    console.log(username, password);
-    // User.findOne({ username: username }, function (err, user) {
-    //   if (err) { return done(err); }
-    //   if (!user) { return done(null, false); }
-    //   if (!user.verifyPassword(password)) { return done(null, false); }
-    //   return done(null, user);
-    // });
+  new Strategy(function(username, password, cb) {
+    users
+      .findByUsername(username)
+      .then(user => {
+        if (!user) {
+          return cb(null, false);
+        }
+        if (user.password != password) {
+          return cb(null, false);
+        }
+        return cb(null, user);
+      })
+      .catch(err => cb(err));
   })
 );
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  users
+    .findById(id)
+    .then(user => cb(null, user))
+    .catch(err => cb(err));
+});
 
 app.use(cors());
 app.use(express.static("public"));
@@ -44,9 +60,14 @@ app.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
   function(req, res) {
-    res.redirect("/");
+    res.json({'status': 'logged in'});
   }
 );
+app.get('/logout',
+  function(req, res){
+    req.logout();
+      res.json({'status': 'logged out'});
+  });
 
 app.get("/characters", characters.readAllCharacters);
 app.post("/character", characters.createCharacter);
