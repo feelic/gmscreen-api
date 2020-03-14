@@ -1,5 +1,5 @@
 import connect from "./connect.js";
-import SCHEMA from "../constants/schema.js";
+import SCHEMA from "../constants/characters-schema.js";
 import { DB_NAME } from "../constants/index.js";
 
 function initDB() {

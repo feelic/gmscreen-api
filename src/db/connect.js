@@ -16,9 +16,8 @@ export function runDBAction (action) {
   return connect()
     .then(client => {
       const db = client.db(DB_NAME);
-      const collection = db.collection("documents");
 
-      return action(collection);
+      return action(db);
     })
     .then((res) => {
       return res;
