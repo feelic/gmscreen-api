@@ -12,6 +12,10 @@ export default {
           bsonType: "string",
           description: "must be a string and is required"
         },
+        image: {
+          bsonType: "string",
+          description: "must be a string and is required"
+        },
         bios: {
           bsonType: "array",
           minItems: 0,

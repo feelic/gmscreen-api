@@ -7,6 +7,7 @@ import passport from "passport";
 import localStrategy from "passport-local";
 
 import * as characters from "./api/characters.js";
+import * as campaigns from "./api/campaigns.js";
 import uploadImage from "./api/image-upload.js";
 import * as users from "./api/users.js";
 
@@ -74,11 +75,11 @@ app.post("/character", characters.createCharacter);
 app.get("/character/:charId", characters.readSingleCharacter);
 app.post("/character/:charId", characters.updateCharacter);
 app.delete("/character/:charId", characters.deleteCharacter);
-app.get("/campaigns", characters.readAllCampaigns);
-app.post("/campaign", characters.createCampaign);
-app.get("/campaign/:campaignId", characters.readSingleCampaign);
-app.post("/campaign/:campaignId", characters.updateCampaign);
-app.delete("/campaign/:campaignId", characters.deleteCampaign);
+app.get("/campaigns", campaigns.readAllCampaigns);
+app.post("/campaign", campaigns.createCampaign);
+app.get("/campaign/:campaignId", campaigns.readSingleCampaign);
+app.post("/campaign/:campaignId", campaigns.updateCampaign);
+app.delete("/campaign/:campaignId", campaigns.deleteCampaign);
 app.post("/image-upload", uploadImage);
 
 app.listen(port, () =>
