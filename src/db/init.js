@@ -1,5 +1,6 @@
 import connect from "./connect.js";
 import CHARACTER_SCHEMA from "../constants/characters-schema.js";
+import CAMPAIGN_SCHEMA from "../constants/characters-schema.js";
 import { DB_NAME } from "../constants/index.js";
 
 function initDB() {
@@ -7,7 +8,9 @@ function initDB() {
     const db = client.db(DB_NAME);
 
     db.createCollection("characters", CHARACTER_SCHEMA).then(() => {
-      client.close();
+      db.createCollection("campaigns", CAMPAIGN_SCHEMA).then(() => {
+        client.close();
+      });
     });
   });
 }

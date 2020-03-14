@@ -74,6 +74,11 @@ app.post("/character", characters.createCharacter);
 app.get("/character/:charId", characters.readSingleCharacter);
 app.post("/character/:charId", characters.updateCharacter);
 app.delete("/character/:charId", characters.deleteCharacter);
+app.get("/campaigns", characters.readAllCampaigns);
+app.post("/campaign", characters.createCampaign);
+app.get("/campaign/:campaignId", characters.readSingleCampaign);
+app.post("/campaign/:campaignId", characters.updateCampaign);
+app.delete("/campaign/:campaignId", characters.deleteCampaign);
 app.post("/image-upload", uploadImage);
 
 app.listen(port, () =>

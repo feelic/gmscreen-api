@@ -4,6 +4,10 @@ export default {
       bsonType: "object",
       required: ["name"],
       properties: {
+        campaign: {
+          bsonType: "string",
+          description:"must be a ref to the campaign this character is part of and is required"
+        },
         name: {
           bsonType: "string",
           description: "must be a string and is required"
@@ -19,6 +23,10 @@ export default {
         status: {
           enum: ["alive", "dead", "missing"],
           description: "can only be one of the enum values and is required"
+        },
+        hidden: {
+          bsonType: "bool",
+          description: "must be a boolean and is required"
         },
         bios: {
           bsonType: "array",

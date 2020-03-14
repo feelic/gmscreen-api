@@ -14,7 +14,7 @@ install:
 	sudo systemctl start mongod
 	sudo systemctl enable mongod
 	npm install
-	node src/init-database.js
+	node src/db/init.js
 
 start:
 	sudo systemctl start mongod
