@@ -14,6 +14,15 @@ export function readAllCampaigns(req, res) {
 export function createCampaign(req, res) {
   const campaign = req.body;
 
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
+
   actions
     .insertCampaigns([campaign])
     .then(data => {
@@ -29,7 +38,8 @@ export function readSingleCampaign(req, res) {
     .then(data => {
       if (!data[0]) {
         return res.status(404).json({
-          error: `Could not find campaign with id ${campaignId}`
+          status: "error",
+          details: `Could not find campaign with id ${campaignId}`
         });
       }
       res.json({ data: data[0] });
@@ -39,6 +49,15 @@ export function readSingleCampaign(req, res) {
 export function updateCampaign(req, res) {
   const campaignId = req.params.campaignId;
   const campaign = req.body;
+
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
 
   actions
     .updateCampaign(campaignId, campaign)
@@ -53,6 +72,15 @@ export function updateCampaign(req, res) {
 
 export function deleteCampaign(req, res) {
   const campaignId = req.params.campaignId;
+
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
 
   actions
     .removeCampaign(campaignId)

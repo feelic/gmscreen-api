@@ -15,6 +15,15 @@ export function readAllCharacters(req, res) {
 export function createCharacter(req, res) {
   const character = req.body;
 
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
+
   actions
     .insertCharacters([character])
     .then(data => {
@@ -30,7 +39,8 @@ export function readSingleCharacter(req, res) {
     .then(data => {
       if (!data[0]) {
         return res.status(404).json({
-          error: `Could not find character with id ${charId}`
+          status: "error",
+          details: `Could not find character with id ${charId}`
         });
       }
       res.json({ data: data[0] });
@@ -40,6 +50,15 @@ export function readSingleCharacter(req, res) {
 export function updateCharacter(req, res) {
   const charId = req.params.charId;
   const character = req.body;
+
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
 
   actions
     .updateCharacter(charId, character)
@@ -54,6 +73,15 @@ export function updateCharacter(req, res) {
 
 export function deleteCharacter(req, res) {
   const charId = req.params.charId;
+
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
 
   actions
     .removeCharacter(charId)

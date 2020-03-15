@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
 import session from "express-session";
+import sessionFileStore from "session-file-store";
 import passport from "passport";
 import localStrategy from "passport-local";
 
@@ -14,6 +15,7 @@ import * as users from "./api/users.js";
 const app = express();
 const port = 3000;
 const Strategy = localStrategy.Strategy;
+const FileStore = sessionFileStore(session);
 
 passport.use(
   new Strategy(function(username, password, cb) {
@@ -21,12 +23,12 @@ passport.use(
       .findByUsername(username)
       .then(user => {
         if (!user) {
-          return cb(null, false);
+          return cb(false);
         }
         if (user.password != password) {
-          return cb(null, false);
+          return cb(false);
         }
-        return cb(null, user);
+        return cb(user);
       })
       .catch(err => cb(err));
   })
@@ -34,7 +36,6 @@ passport.use(
 passport.serializeUser(function(user, cb) {
   cb(null, user.id);
 });
-
 passport.deserializeUser(function(id, cb) {
   users
     .findById(id)
@@ -47,7 +48,12 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
-  session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
+  session({
+    secret: "keyboard cat",
+    store: new FileStore(),
+    resave: true,
+    saveUninitialized: true
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,18 +63,23 @@ app.use(
   })
 );
 
-app.post(
-  "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
-  function(req, res) {
-    res.json({'status': 'logged in'});
-  }
-);
-app.get('/logout',
-  function(req, res){
-    req.logout();
-      res.json({'status': 'logged out'});
-  });
+app.post("/login", function(req, res, next) {
+  passport.authenticate("local", function(user) {
+    if (!user) {
+      return res
+        .status(401)
+        .json({ status: "error", details: "wrong credentials" });
+    }
+
+    req.login(user, () => {
+      return res.send({ status: "success", details: "logged in", user });
+    });
+  })(req, res, next);
+});
+app.get("/logout", function(req, res) {
+  req.logout();
+  res.json({ status: "success", details: "logged out" });
+});
 
 app.get("/characters", characters.readAllCharacters);
 app.post("/character", characters.createCharacter);

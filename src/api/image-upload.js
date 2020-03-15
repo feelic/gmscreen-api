@@ -4,6 +4,15 @@ import path from "path";
 const uuidv4 = uuid.v4;
 
 export default function uploadImage(req, res) {
+  // if (!req.isAuthenticated()) {
+  //   return res
+  //     .status(401)
+  //     .json({
+  //       status: "error",
+  //       details: "you need to be logged in to use this route"
+  //     });
+  // }
+
   try {
     if (!req.files) {
       res.send({

@@ -1,19 +1,7 @@
-const records = [
-  {
-    id: 1,
-    username: "jack",
-    password: "secret",
-    displayName: "Jack",
-    emails: [{ value: "jack@example.com" }]
-  },
-  {
-    id: 2,
-    username: "jill",
-    password: "birthday",
-    displayName: "Jill",
-    emails: [{ value: "jill@example.com" }]
-  }
-];
+import fs from 'fs';
+
+const config = JSON.parse(fs.readFileSync('config.json'));
+const records = config.users;
 
 export function findById (id) {
   return new Promise((resolve, reject) => {
