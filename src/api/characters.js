@@ -1,7 +1,8 @@
 import * as actions from "../db/actions.js";
 
 export function readAllCharacters(req, res) {
-  const filters = (req.body && req.body.filters) || {};
+  const campaign = (req.query && req.query.campaign);
+  const filters = {campaign};
 
   actions.findCharacters(filters).then(data => {
     res.json({
