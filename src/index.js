@@ -14,7 +14,7 @@ import uploadImage from "./api/image-upload.js";
 import * as users from "./api/users.js";
 
 const app = express();
-const port = JSON.stringify(fs.readFileSync('config.json')).port || 3000;
+const port = JSON.parse(fs.readFileSync('./config.json')).port || 3000;
 const Strategy = localStrategy.Strategy;
 const FileStore = sessionFileStore(session);
 
