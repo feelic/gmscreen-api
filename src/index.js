@@ -6,6 +6,7 @@ import session from "express-session";
 import sessionFileStore from "session-file-store";
 import passport from "passport";
 import localStrategy from "passport-local";
+import fs from 'fs';
 
 import * as characters from "./api/characters.js";
 import * as campaigns from "./api/campaigns.js";
@@ -13,7 +14,7 @@ import uploadImage from "./api/image-upload.js";
 import * as users from "./api/users.js";
 
 const app = express();
-const port = 3000;
+const port = JSON.stringify(fs.readFileSync('config.json')).port || 3000;
 const Strategy = localStrategy.Strategy;
 const FileStore = sessionFileStore(session);
 
